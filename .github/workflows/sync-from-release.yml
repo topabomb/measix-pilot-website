@@ -22,7 +22,7 @@ on:
         required: true
         type: string
       downloads:
-        description: "Downloads JSON array"
+        description: "Downloads JSON array (string)"
         required: true
         type: string
 
@@ -42,46 +42,31 @@ jobs:
           node-version: "22"
 
       - name: Write payload to files
+        env:
+          PAYLOAD_JSON: ${{ toJSON(github.event.client_payload) }}
+          WD_VERSION: ${{ inputs.version }}
+          WD_VERSION_CODE: ${{ inputs.versionCode }}
+          WD_PUBLISHED_AT: ${{ inputs.publishedAt }}
+          WD_CHANGELOG: ${{ inputs.changelog }}
+          WD_DOWNLOADS: ${{ inputs.downloads }}
         run: |
           mkdir -p /tmp/payload
 
-          # 使用 GitHub Actions 上下文变量直接写入文件
-          # repository_dispatch 的 downloads 是 JSON 对象，用 toJSON 序列化
-          # workflow_dispatch 的 downloads 是字符串，直接写入
-
-          cat > /tmp/payload/write_payload.sh <<'SCRIPT'
-          #!/bin/bash
-          set -e
-
-          EVENT_NAME="${1}"
-          shift
-
-          if [ "$EVENT_NAME" = "repository_dispatch" ]; then
-            printf '%s' "$1" > /tmp/payload/version
-            printf '%s' "$2" > /tmp/payload/versionCode
-            printf '%s' "$3" > /tmp/payload/publishedAt
-            printf '%s' "$4" > /tmp/payload/changelog
-            printf '%s' "$5" > /tmp/payload/downloads
+          if [ -n "$PAYLOAD_JSON" ]; then
+            # repository_dispatch: 从 PAYLOAD_JSON 中用 jq 提取各字段
+            echo "$PAYLOAD_JSON" | jq -r '.version' > /tmp/payload/version
+            echo "$PAYLOAD_JSON" | jq -r '.versionCode' > /tmp/payload/versionCode
+            echo "$PAYLOAD_JSON" | jq -r '.publishedAt' > /tmp/payload/publishedAt
+            echo "$PAYLOAD_JSON" | jq -r '.changelog' > /tmp/payload/changelog
+            echo "$PAYLOAD_JSON" | jq -c '.downloads' > /tmp/payload/downloads
           else
-            printf '%s' "$1" > /tmp/payload/version
-            printf '%s' "$2" > /tmp/payload/versionCode
-            printf '%s' "$3" > /tmp/payload/publishedAt
-            printf '%s' "$4" > /tmp/payload/changelog
-            printf '%s' "$5" > /tmp/payload/downloads
+            # workflow_dispatch: 直接使用环境变量
+            printf '%s' "$WD_VERSION" > /tmp/payload/version
+            printf '%s' "$WD_VERSION_CODE" > /tmp/payload/versionCode
+            printf '%s' "$WD_PUBLISHED_AT" > /tmp/payload/publishedAt
+            printf '%s' "$WD_CHANGELOG" > /tmp/payload/changelog
+            printf '%s' "$WD_DOWNLOADS" > /tmp/payload/downloads
           fi
-          SCRIPT
-          chmod +x /tmp/payload/write_payload.sh
-
-          # 调用脚本，参数由 GitHub Actions 表达式提供
-          # 对于 repository_dispatch，downloads 是数组，需要 toJSON
-          # 对于 workflow_dispatch，downloads 是字符串，直接用
-          /tmp/payload/write_payload.sh \
-            "${{ github.event_name }}" \
-            "${{ github.event.client_payload.version || inputs.version }}" \
-            "${{ github.event.client_payload.versionCode || inputs.versionCode }}" \
-            "${{ github.event.client_payload.publishedAt || inputs.publishedAt }}" \
-            "${{ github.event.client_payload.changelog || inputs.changelog }}" \
-            "${{ github.event.client_payload.downloads && toJSON(github.event.client_payload.downloads) || inputs.downloads }}"
 
           echo "=== Payload values ==="
           echo "version: $(cat /tmp/payload/version)"
