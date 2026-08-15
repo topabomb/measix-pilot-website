@@ -1,5 +1,9 @@
 name: Deploy to GitHub Pages (Fallback)
 
+# 备用部署方案：当 Vercel 不可用时，通过 GitHub Pages 提供网站服务。
+# 主部署方式仍然是 Vercel（measix-pilot.weero.net）。
+# GitHub Pages 地址：https://topabomb.github.io/measix-pilot-website/
+
 on:
   push:
     branches: [main]
@@ -41,8 +45,13 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
