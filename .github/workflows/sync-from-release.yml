@@ -111,31 +111,34 @@ jobs:
         run: |
           # 用上游 changelog.md 正文替换 changelog/index.md 中标记之间的内容
           # 保留 frontmatter 和头部说明，只更新版本段落
+          # 不使用 heredoc，避免 YAML run: | 中的缩进问题
 
           # 提取上游 changelog 正文（跳过标题和说明块）
           sed '/^# 功能迭代清单$/,/^---$/{ /^---$/!d; }' /tmp/upstream-changelog.md > /tmp/changelog-body.md
 
-          # 组装完整页面：frontmatter + 头部 + 正文 + 结尾标记
-          cat > docs/changelog/index.md <<'HEADER'
----
-title: 更新日志
-icon: clock-rotate-left
-author: Measix Pilot
-date: 2026-08-15
-category: 更新
----
+          # 用 printf 写入头部内容到临时文件
+          printf '%s\n' \
+            '---' \
+            'title: 更新日志' \
+            'icon: clock-rotate-left' \
+            'author: Measix Pilot' \
+            'date: 2026-08-15' \
+            'category: 更新' \
+            '---' \
+            '' \
+            '# 更新日志' \
+            '' \
+            '> 以下更新日志随每次版本发布自动同步，源自 [rikkahub_mcp 仓库](https://github.com/topabomb/rikkahub_mcp/blob/main/docs/dev/changelog.md)。' \
+            '' \
+            '::: tip 版本线说明' \
+            'Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线（`2.x.x`）独立。完整的上游同步分析详见 [上游同步文档](https://github.com/topabomb/rikkahub_mcp/blob/main/docs/dev/upstream-sync.md)。' \
+            ':::' \
+            '' \
+            '<!-- CHANGELOG_CONTENT_START -->' \
+            > /tmp/changelog-header.md
 
-# 更新日志
-
-> 以下更新日志随每次版本发布自动同步，源自 [rikkahub_mcp 仓库](https://github.com/topabomb/rikkahub_mcp/blob/main/docs/dev/changelog.md)。
-
-::: tip 版本线说明
-Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线（`2.x.x`）独立。完整的上游同步分析详见 [上游同步文档](https://github.com/topabomb/rikkahub_mcp/blob/main/docs/dev/upstream-sync.md)。
-:::
-
-<!-- CHANGELOG_CONTENT_START -->
-HEADER
-          cat /tmp/changelog-body.md >> docs/changelog/index.md
+          # 拼接：头部 + 正文 + 结尾标记
+          cat /tmp/changelog-header.md /tmp/changelog-body.md > docs/changelog/index.md
           echo "" >> docs/changelog/index.md
           echo "<!-- CHANGELOG_CONTENT_END -->" >> docs/changelog/index.md
 
