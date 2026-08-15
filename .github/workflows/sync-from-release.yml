@@ -6,19 +6,23 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version name (e.g. 0.0.15)"
+        description: "Version name (e.g. 0.0.16)"
         required: true
         type: string
       versionCode:
-        description: "Version code (e.g. 15)"
+        description: "Version code (e.g. 16)"
+        required: true
+        type: string
+      publishedAt:
+        description: "Published at (ISO 8601, e.g. 2026-08-15T04:14:12Z)"
         required: true
         type: string
       changelog:
-        description: "Changelog summary"
+        description: "Changelog content (Markdown)"
         required: true
         type: string
-      releaseUrl:
-        description: "Release URL"
+      downloads:
+        description: "Downloads JSON array"
         required: true
         type: string
 
@@ -32,37 +36,146 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: Determine payload
         id: payload
         run: |
           if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
             echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
             echo "versionCode=${{ github.event.client_payload.versionCode }}" >> $GITHUB_OUTPUT
+            echo "publishedAt=${{ github.event.client_payload.publishedAt }}" >> $GITHUB_OUTPUT
             echo "changelog=${{ github.event.client_payload.changelog }}" >> $GITHUB_OUTPUT
-            echo "releaseUrl=${{ github.event.client_payload.releaseUrl }}" >> $GITHUB_OUTPUT
+            echo "downloads=${{ github.event.client_payload.downloads }}" >> $GITHUB_OUTPUT
           else
             echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
             echo "versionCode=${{ inputs.versionCode }}" >> $GITHUB_OUTPUT
+            echo "publishedAt=${{ inputs.publishedAt }}" >> $GITHUB_OUTPUT
             echo "changelog=${{ inputs.changelog }}" >> $GITHUB_OUTPUT
-            echo "releaseUrl=${{ inputs.releaseUrl }}" >> $GITHUB_OUTPUT
+            echo "downloads=${{ inputs.downloads }}" >> $GITHUB_OUTPUT
           fi
+
+      - name: Fetch upstream changelog
+        id: upstream_changelog
+        run: |
+          # 从 rikkahub_mcp 仓库获取完整 changelog.md
+          # 使用 GitHub API（无需认证，公开仓库）
+          CHANGELOG_MD=$(curl -sS \
+            -H "Accept: application/vnd.github.v3.raw" \
+            "https://api.github.com/repos/topabomb/rikkahub_mcp/contents/docs/dev/changelog.md")
+
+          # 写入临时文件
+          echo "$CHANGELOG_MD" > /tmp/upstream-changelog.md
+
+          # 验证内容不为空
+          if [ ! -s /tmp/upstream-changelog.md ]; then
+            echo "Failed to fetch upstream changelog" >&2
+            exit 1
+          fi
+
+          echo "Fetched changelog successfully ($(wc -l < /tmp/upstream-changelog.md) lines)"
 
       - name: Update version.json
         run: |
-          cat > docs/.vuepress/public/version.json <<EOF
-          {
-            "version": "${{ steps.payload.outputs.version }}",
-            "versionCode": ${{ steps.payload.outputs.versionCode }},
-            "url": "${{ steps.payload.outputs.releaseUrl }}",
-            "changelog": "${{ steps.payload.outputs.changelog }}",
-            "updatedAt": "$(date -u +%Y-%m-%d)"
-          }
-          EOF
+          # 构建静态 version.json（App 更新检查的数据源）
+          # 格式与 App 端 UpdateInfo 数据模型匹配
+          VERSION="${{ steps.payload.outputs.version }}"
+          VERSION_CODE="${{ steps.payload.outputs.versionCode }}"
+          PUBLISHED_AT="${{ steps.payload.outputs.publishedAt }}"
+          CHANGELOG="${{ steps.payload.outputs.changelog }}"
+          DOWNLOADS='${{ steps.payload.outputs.downloads }}'
+
+          # 使用 jq 安全构建 JSON（处理多行 changelog 转义）
+          jq -n \
+            --arg version "$VERSION" \
+            --argjson versionCode "$VERSION_CODE" \
+            --arg publishedAt "$PUBLISHED_AT" \
+            --arg changelog "$CHANGELOG" \
+            --argjson downloads "$DOWNLOADS" \
+            '{
+              version: $version,
+              versionCode: $versionCode,
+              publishedAt: $publishedAt,
+              changelog: $changelog,
+              downloads: $downloads
+            }' > docs/.vuepress/public/version.json
+
+          echo "Updated version.json:"
+          cat docs/.vuepress/public/version.json
+
+      - name: Update changelog page
+        run: |
+          # 从完整 changelog.md 提取版本段落，构建静态 changelog/index.md
+          # 保留前缀（frontmatter + 标题 + tip）和后缀标记
+
+          # 读取上游 changelog 内容
+          UPSTREAM_CHANGELOG=$(cat /tmp/upstream-changelog.md)
+
+          # 构建 frontmatter 和头部
+          cat > docs/changelog/index.md <<'FRONTMATTER'
+          ---
+          title: 更新日志
+          icon: clock-rotate-left
+          author: Measix Pilot
+          date: 2026-08-15
+          category: 更新
+          ---
+
+          # 更新日志
+
+          > 以下更新日志随每次版本发布自动同步，源自 [rikkahub_mcp 仓库](https://github.com/topabomb/rikkahub_mcp/blob/main/docs/dev/changelog.md)。
+
+          ::: tip 版本线说明
+          Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线（`2.x.x`）独立。完整的上游同步分析详见 [上游同步文档](https://github.com/topabomb/rikkahub_mcp/blob/main/docs/dev/upstream-sync.md)。
+          :::
+
+          <!-- CHANGELOG_CONTENT_START -->
+          FRONTMATTER
+
+          # 追加上游 changelog 正文（去掉文档头部的说明行）
+          echo "$UPSTREAM_CHANGELOG" | sed '/^# 功能迭代清单$/,/^---$/{ /^---$/!d; }' >> docs/changelog/index.md
+
+          # 追加结束标记
+          echo "" >> docs/changelog/index.md
+          echo "<!-- CHANGELOG_CONTENT_END -->" >> docs/changelog/index.md
+
+          echo "Updated changelog/index.md"
+
+      - name: Update config.ts version info
+        run: |
+          # 更新 VuePress 配置中的 softwareVersion 和 datePublished
+          VERSION="${{ steps.payload.outputs.version }}"
+          PUBLISHED_DATE=$(echo "${{ steps.payload.outputs.publishedAt }}" | cut -dT -f1)
+
+          sed -i "s/softwareVersion: \".*\"/softwareVersion: \"${VERSION}\"/" docs/.vuepress/config.ts
+          sed -i "s/datePublished: \".*\"/datePublished: \"${PUBLISHED_DATE}\"/" docs/.vuepress/config.ts
+
+          echo "Updated config.ts version to ${VERSION}, date to ${PUBLISHED_DATE}"
 
       - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add docs/.vuepress/public/version.json
-          git commit -m "chore: sync version to ${{ steps.payload.outputs.version }}" || echo "No changes to commit"
+          git add docs/.vuepress/public/version.json docs/changelog/index.md docs/.vuepress/config.ts
+          git commit -m "chore: sync version ${{ steps.payload.outputs.version }} from app release" || echo "No changes to commit"
           git push
+
+      - name: Verify deployment
+        run: |
+          # 等待 Vercel 自动部署（push 触发），然后验证 version.json 可访问
+          echo "Waiting 60s for Vercel deployment..."
+          sleep 60
+
+          VERSION="${{ steps.payload.outputs.version }}"
+          RESPONSE=$(curl -sS "https://measix-pilot.weero.net/version.json" || echo "FETCH_FAILED")
+          REMOTE_VERSION=$(echo "$RESPONSE" | jq -r '.version // empty' 2>/dev/null || echo "")
+
+          if [ "$REMOTE_VERSION" = "$VERSION" ]; then
+            echo "✅ version.json verified: remote version $REMOTE_VERSION matches expected $VERSION"
+          else
+            echo "⚠️ version.json verification: remote version '$REMOTE_VERSION' (expected '$VERSION')"
+            echo "This may be due to Vercel deployment delay. The file will be live shortly."
+          fi

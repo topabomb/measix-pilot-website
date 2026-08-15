@@ -1,7 +1,31 @@
 {
+<<<<<<< HEAD
   "version": "",
   "versionCode": ,
   "url": "",
   "changelog": "",
   "updatedAt": "2026-08-15"
+=======
+  "version": "0.0.16",
+  "versionCode": 16,
+  "publishedAt": "2026-08-15T04:14:12Z",
+  "changelog": "## 0.0.16（versionCode 16）— 2026-08-13\n\n### 新增\n\n- 聊天可按需开启 `generate_image`，用全局默认图片模型出图；用户明确要求并审批后，可把独立副本设为当前会话助手背景\n- 设置页补齐默认文生图模型；页面与工具共用队列和 Gallery。Gallery、聊天图、背景各存一份\n- 文件管理增加「文生图」Tab\n\n### 变更\n\n- Target 看不到该工具；没有有效默认图片模型时也不注册\n- 模型只看到 `/upload/<file>`；chat copy 缺失时标为 `artifact_missing`\n- 子助手失败分为政策拒绝、Provider 错误和运行时错误，不回显政策检查类型\n- `ask_user` 与普通工具审批共用同一套音效\n\n### 修复\n\n- 文生图编辑走共享队列；取消背景更新不再被改写成普通失败\n- 清空 Upload 会提示同时删掉聊天副本和助手背景",
+  "downloads": [
+    {
+      "name": "MeasixPilot_0.0.16_arm64-v8a-release.apk",
+      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.16/MeasixPilot_0.0.16_arm64-v8a-release.apk",
+      "size": "32.7MB"
+    },
+    {
+      "name": "MeasixPilot_0.0.16_x86_64-release.apk",
+      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.16/MeasixPilot_0.0.16_x86_64-release.apk",
+      "size": "33.4MB"
+    },
+    {
+      "name": "MeasixPilot_0.0.16_universal-release.apk",
+      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.16/MeasixPilot_0.0.16_universal-release.apk",
+      "size": "42.3MB"
+    }
+  ]
+>>>>>>> d3b4249 (refactor: static version.json and changelog driven by release dispatch)
 }
