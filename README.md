@@ -10,8 +10,8 @@
 - ✨ **功能特性**：详细的功能介绍和说明
 - 📖 **使用指南**：快速上手和进阶配置
 - 📥 **下载页面**：APK 下载和系统要求
-- 📝 **更新日志**：版本迭代记录
-- 🔗 **双仓库联动**：与 [rikkahub_mcp](https://github.com/topabomb/rikkahub_mcp) 主项目的 Release 同步
+- 📝 **更新日志**：动态从 GitHub Releases 获取，无需手动维护
+- 🔗 **版本检查**：Vercel Serverless Function 动态返回最新版本信息
 
 ## 技术栈
 
@@ -52,16 +52,14 @@ pnpm clean
 
 本仓库也配置了 GitHub Actions 工作流，可作为备用部署方式。
 
-## 双仓库联动
+## 动态数据
 
-本网站与 `rikkahub_mcp` 主项目联动：
+本网站的两个数据端点均**动态**从 GitHub Releases API 获取，无需手动维护：
 
-1. 主项目发布 Release 时，通过 `repository_dispatch` 通知本仓库
-2. 本仓库自动更新 `version.json` 和更新日志
-3. 重新构建并部署到 Vercel
-4. 应用内更新检查从本网站获取版本信息
+- **`/changelog/`**：Vue 组件客户端拉取 GitHub Releases，动态渲染更新日志
+- **`/version.json`**：Vercel Serverless Function（`api/version.ts`）服务端拉取 GitHub Releases API，返回版本信息（含 10 分钟缓存）
 
-详见 [双仓库联动机制](dev-docs/repo-sync.md)。
+`rikkahub_mcp` 发布新 Release 后，网站自动获取最新数据，无需任何联动触发。
 
 ## 项目结构
 
@@ -73,8 +71,7 @@ measix-pilot-website/
 │   │   │   └── ChangelogReleases.vue  # 动态更新日志组件
 │   │   ├── config.ts          # VuePress 配置
 │   │   └── public/
-│   │       ├── logo.svg       # Logo
-│   │       └── version.json   # 版本数据（应用内更新检查源）
+│   │       └── logo.svg       # Logo
 │   ├── about/
 │   │   └── index.md            # 关于
 │   ├── changelog/
@@ -102,8 +99,9 @@ measix-pilot-website/
 │   │   ├── workspace.md     # 工作空间使用
 │   │   └── backup.md        # 备份与同步配置
 │   └── index.md              # 首页
-├── dev-docs/
-│   └── repo-sync.md           # 双仓库联动机制（开发文档，不参与网站构建）
+├── api/
+│   └── version.ts           # Vercel Serverless Function（动态版本信息）
+├── dev-docs/                # 本地开发文档（git 排除）
 ├── .github/workflows/
 │   ├── sync-from-release.yml  # Release 同步工作流
 │   └── deploy-pages.yml      # GitHub Pages 部署工作流

@@ -21,6 +21,10 @@ Thumbs.db
 
 # Vercel
 .vercel
+.env.local
+
+# Dev docs (local only, not tracked in git)
+dev-docs/
 
 # Logs
 *.log

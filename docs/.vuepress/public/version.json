@@ -1,7 +1,0 @@
-{
-  "version": "0.0.15",
-  "versionCode": 15,
-  "url": "https://github.com/topabomb/rikkahub_mcp/releases/latest",
-  "changelog": "注册 qwen-3.8-max；注册 MiMo v3/v3 pro；Claude Sonnet 5/Opus 5 + adaptive thinking；muse-spark/muse-glimmer；搜索 SearchMode 卡片；WebView 销毁修复；内置搜索按 Provider 开门修复",
-  "updatedAt": "2026-08-13"
-}
