@@ -69,6 +69,8 @@ pnpm clean
 measix-pilot-website/
 ├── docs/
 │   ├── .vuepress/
+│   │   ├── components/
+│   │   │   └── ChangelogReleases.vue  # 动态更新日志组件
 │   │   ├── config.ts          # VuePress 配置
 │   │   └── public/
 │   │       ├── logo.svg       # Logo

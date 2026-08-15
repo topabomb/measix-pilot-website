@@ -177,11 +177,9 @@ Measix Pilot 应用内更新检查使用宽松版本排序，兼容不同版本�
 
 ### 更新日志同步
 
-网站的更新日志页面（`docs/changelog/index.md`）应反映 `upstream-sync.md` 中记录的每次版本迭代。当主项目发布新 Release 时，联动工作流会更新 `version.json`，同时需要手动或半自动更新更新日志页面内容。
+网站的更新日志页面（`docs/changelog/index.md`）使用 Vue 组件 `ChangelogReleases.vue` **动态**从 GitHub Releases API 拉取数据，**无需手动维护**。每当 `rikkahub_mcp` 发布新 Release，页面会自动展示最新内容。
 
-::: tip 半自动更新
-联动工作流会自动更新 `version.json`。更新日志页面的详细内容目前需要手动维护，未来可以通过解析 Release Notes 自动生成。
-:::
+联动工作流只需更新 `version.json`（用于应用内更新检查），更新日志页面由前端组件实时获取 GitHub Releases 数据。
 
 ## 部署架构
 

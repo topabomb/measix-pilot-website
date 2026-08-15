@@ -32,19 +32,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: "10"
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Determine payload
         id: payload
         run: |
@@ -62,7 +49,7 @@ jobs:
 
       - name: Update version.json
         run: |
-          cat > docs/.vuepress/public/version.json << EOF
+          cat > docs/.vuepress/public/version.json <<EOF
           {
             "version": "${{ steps.payload.outputs.version }}",
             "versionCode": ${{ steps.payload.outputs.versionCode }},
@@ -72,10 +59,7 @@ jobs:
           }
           EOF
 
-      - name: Build site
-        run: pnpm build
-
-      - name: Commit changes
+      - name: Commit and push
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
