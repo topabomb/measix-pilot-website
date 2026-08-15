@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <!-- 渐变定义 -->
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c3aed"/>
+      <stop offset="50%" stop-color="#5b8def"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+  <!-- 圆角背景 -->
+  <rect width="128" height="128" rx="28" fill="url(#grad)"/>
+  <!-- 对话气泡形状 -->
+  <path d="M34 42C34 35.4 39.4 30 46 30H82C88.6 30 94 35.4 94 42V62C94 68.6 88.6 74 82 74H66L52 88V74H46C39.4 74 34 68.6 34 62V42Z" fill="white" fill-opacity="0.95"/>
+  <!-- 三个点（对话指示器） -->
+  <circle cx="52" cy="52" r="4" fill="#7c3aed"/>
+  <circle cx="64" cy="52" r="4" fill="#5b8def"/>
+  <circle cx="76" cy="52" r="4" fill="#06b6d4"/>
+</svg>

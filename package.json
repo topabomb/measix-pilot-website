@@ -1,0 +1,23 @@
+{
+  "name": "measix-pilot-website",
+  "version": "1.0.0",
+  "description": "Measix Pilot 官方网站 - 小睿助手",
+  "license": "AGPL-3.0",
+  "type": "module",
+  "scripts": {
+    "build": "vuepress build docs",
+    "dev": "vuepress dev docs",
+    "clean": "vuepress clean docs",
+    "serve": "vuepress serve docs"
+  },
+  "devDependencies": {
+    "@vuepress/bundler-vite": "2.0.0-rc.20",
+    "sass-embedded": "^1.102.0",
+    "vuepress": "2.0.0-rc.20",
+    "vuepress-theme-hope": "2.0.0-rc.59"
+  },
+  "dependencies": {
+    "katex": "^0.18.4",
+    "vue": "^3.5.41"
+  }
+}

@@ -1,0 +1,37 @@
+/* Measix Pilot 品牌定制样式 */
+
+:root {
+  --measix-primary: #7c3aed;
+  --measix-secondary: #5b8def;
+  --measix-accent: #06b6d4;
+}
+
+/* 首页 Hero 区域 */
+.hero {
+  background: linear-gradient(135deg, #7c3aed 0%, #5b8def 50%, #06b6d4 100%);
+}
+
+/* 品牌渐变文字 */
+.brand-gradient-text {
+  background: linear-gradient(135deg, #7c3aed 0%, #5b8def 50%, #06b6d4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 卡片悬浮效果 */
+.vp-feature:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(124, 58, 237, 0.15);
+}
+
+/* 按钮样式增强 */
+.btn--primary {
+  background: linear-gradient(135deg, #7c3aed 0%, #5b8def 100%);
+  border: none;
+}
+
+.btn--primary:hover {
+  background: linear-gradient(135deg, #6d28e9 0%, #4a7de0 100%);
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}

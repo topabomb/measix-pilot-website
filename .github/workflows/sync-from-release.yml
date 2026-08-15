@@ -1,0 +1,84 @@
+name: Sync from App Release
+
+on:
+  repository_dispatch:
+    types: [app-release]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version name (e.g. 0.0.15)"
+        required: true
+        type: string
+      versionCode:
+        description: "Version code (e.g. 15)"
+        required: true
+        type: string
+      changelog:
+        description: "Changelog summary"
+        required: true
+        type: string
+      releaseUrl:
+        description: "Release URL"
+        required: true
+        type: string
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Determine payload
+        id: payload
+        run: |
+          if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+            echo "version=${{ github.event.client_payload.version }}" >> $GITHUB_OUTPUT
+            echo "versionCode=${{ github.event.client_payload.versionCode }}" >> $GITHUB_OUTPUT
+            echo "changelog=${{ github.event.client_payload.changelog }}" >> $GITHUB_OUTPUT
+            echo "releaseUrl=${{ github.event.client_payload.releaseUrl }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${{ inputs.version }}" >> $GITHUB_OUTPUT
+            echo "versionCode=${{ inputs.versionCode }}" >> $GITHUB_OUTPUT
+            echo "changelog=${{ inputs.changelog }}" >> $GITHUB_OUTPUT
+            echo "releaseUrl=${{ inputs.releaseUrl }}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update version.json
+        run: |
+          cat > docs/.vuepress/public/version.json << EOF
+          {
+            "version": "${{ steps.payload.outputs.version }}",
+            "versionCode": ${{ steps.payload.outputs.versionCode }},
+            "url": "${{ steps.payload.outputs.releaseUrl }}",
+            "changelog": "${{ steps.payload.outputs.changelog }}",
+            "updatedAt": "$(date -u +%Y-%m-%d)"
+          }
+          EOF
+
+      - name: Build site
+        run: pnpm build
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/.vuepress/public/version.json
+          git commit -m "chore: sync version to ${{ steps.payload.outputs.version }}" || echo "No changes to commit"
+          git push
