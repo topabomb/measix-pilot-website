@@ -1,11 +1,4 @@
 {
-<<<<<<< HEAD
-  "version": "",
-  "versionCode": ,
-  "url": "",
-  "changelog": "",
-  "updatedAt": "2026-08-15"
-=======
   "version": "0.0.16",
   "versionCode": 16,
   "publishedAt": "2026-08-15T04:14:12Z",
@@ -27,5 +20,4 @@
       "size": "42.3MB"
     }
   ]
->>>>>>> d3b4249 (refactor: static version.json and changelog driven by release dispatch)
 }
