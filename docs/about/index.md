@@ -8,57 +8,39 @@ category: 关于
 
 # 关于 Measix Pilot
 
-> Measix Pilot（小睿助手）— 基于 [RikkaHub](https://github.com/rikkahub/rikkahub) fork 的原生 Android LLM 聊天客户端。
+> Measix Pilot（小睿助手）— **隐私可控的纯本地** Android AI 客户端，让 AI 真正成为你的移动伙伴。
+
+## 项目定位
+
+Measix Pilot 致力于为移动端用户提供**隐私可控、功能丰富、体验原生**的 AI 对话体验。核心理念：
+
+- **隐私优先**：数据不出设备，无账号、无遥测、无云端中转
+- **本地能力**：Linux 工作空间、子助手协同、文生图等本地工具
+- **开放协议**：MCP 协议深度集成，连接外部工具生态
+- **全形态适配**：手机、折叠屏、平板深度自适应
 
 ## 项目背景
 
 Measix Pilot 由 [topabomb](https://github.com/topabomb) 创建，是 [RikkaHub](https://github.com/rikkahub/rikkahub)（原作者 [re-ovo](https://github.com/re-ovo)）的 fork。
 
-- **Fork 基线**：RikkaHub v2.3.1（versionCode 164），提交 `5b9be301`
-- **Fork 日期**：2026-06-18
+- **Fork 日期**：2026 年 6 月
 
-## Fork 精简方向
+## 相比原项目的调整
 
-相比原项目 RikkaHub，Measix Pilot 做了以下精简调整：
+- **移除** Firebase、Web 服务器等模块（隐私优先）
+- **移除** 角色卡导入、Lorebook、翻译等功能（聚焦核心）
+- **精简** 预设服务商和搜索引擎
+- **许可证** AGPL-3.0 开源
 
-- **移除** Firebase、Retrofit、Web 服务器模块
-- **移除** 酒馆角色卡导入、Lorebook、翻译功能
-- **精简** 预设 Provider（18 → 4）
-- **精简** 搜索引擎（17 → 4）
-- **许可证** 同步上游变更为纯 AGPL-3.0
+## 开源许可
 
-## 上游同步策略
-
-Measix Pilot 持续跟踪上游 RikkaHub 的提交，并按以下原则选择性同步：
-
-- ✅ **引入**：bug 修复、本地工具优化、UI/UX 改进、新模型适配、安全修复
-- ⚠️ **按需引入**：测试用例、依赖更新、持久化变更
-- ❌ **跳过**：与 Fork 精简方向冲突的改动（新 Provider、赞助商、新 TTS/搜索引擎）
-
-完整的同步记录详见 [上游同步文档](https://github.com/topabomb/rikkahub_mcp/blob/main/docs/dev/upstream-sync.md)。
-
-## 技术栈
-
-| 类别 | 技术 |
-|------|------|
-| 语言 | Kotlin |
-| UI | Jetpack Compose + Material Expressive (M3) + Navigation 3 |
-| DI | Koin |
-| 网络 | OkHttp + Ktor Client |
-| 序列化 | kotlinx.serialization |
-| 数据库 | Room |
-| 异步 | Coroutines + Flow |
-| 图片 | Coil |
-
-## 许可证
-
-[AGPL-3.0](https://github.com/topabomb/rikkahub_mcp/blob/main/LICENSE)
+本项目基于 [AGPL-3.0](https://github.com/topabomb/rikkahub_mcp/blob/main/LICENSE) 许可证开源，源代码完全公开，欢迎审计和贡献。
 
 ## 链接
 
 - **GitHub 仓库**：[topabomb/rikkahub_mcp](https://github.com/topabomb/rikkahub_mcp)
 - **上游项目**：[rikkahub/rikkahub](https://github.com/rikkahub/rikkahub)
-- **本网站仓库**：[measix-pilot-website](https://github.com/topabomb/measix-pilot-website)
+- **在线站点**：[measix-pilot.weero.net](https://measix-pilot.weero.net/)
 
 ## 致谢
 

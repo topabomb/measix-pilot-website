@@ -63,16 +63,24 @@ const renderMarkdown = (md: string): string => {
 
 onMounted(async () => {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
     const resp = await fetch(
-      `https://api.github.com/repos/${REPO}/releases?per_page=30`,
+      `https://api.github.com/repos/${REPO}/releases?per_page=20`,
       {
         headers: { Accept: "application/vnd.github.v3+json" },
+        signal: controller.signal,
       },
     );
+    clearTimeout(timeout);
     if (!resp.ok) throw new Error(`GitHub API 返回 ${resp.status}`);
     releases.value = await resp.json();
   } catch (e) {
-    error.value = e instanceof Error ? e.message : "未知错误";
+    if (e instanceof DOMException && e.name === "AbortError") {
+      error.value = "请求超时";
+    } else {
+      error.value = e instanceof Error ? e.message : "未知错误";
+    }
   } finally {
     loading.value = false;
   }
