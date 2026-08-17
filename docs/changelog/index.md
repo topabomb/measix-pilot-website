@@ -17,6 +17,22 @@ Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线�
 <!-- CHANGELOG_CONTENT_START -->
 ---
 
+## 0.0.17（versionCode 17）— 2026-08-17
+
+### 新增
+
+- `assistant_call` 可附带最多 4 个任务相关附件；第一阶段支持图片。主助手只决定传哪些，Runtime 按 Target 本次模型选择原图或 visual observation
+- 会话图片会盖上稳定 `attachment:<uuid>` 句柄，模型可在工具参数里引用；外部 HTTPS 图先落地再注入 Child
+- 子助手可按配置调用 `generate_image`；主卡片用轻量引用显示交付物，Caller 默认只拿文本和 `artifacts[]`，点名 `extras=["artifacts"]` 后才按 Caller 能力拿到原图或 visual observation
+
+### 变更
+
+- `assistant_call` 进入 Coordinator 前的参数错误改为与终态一致的 `status` + `reason` 信封
+- Target 不再永久过滤 `generate_image`；未开启 `TextToImage` 或没有有效默认图片模型时仍不注册
+- Target 非交互下需审批工具自动拒绝的返回统一为 `tool_not_permitted` + `approval_unavailable` + `message`：语义为「需要审批但当前运行环境无法提供审批，不要原样重试」；只拒绝当前 ToolCall，不终止整个 Run。`ask_user` 仍走交互桥接，与审批错误协议无关
+
+---
+
 ## 0.0.16（versionCode 16）— 2026-08-13 ~ 2026-08-17
 
 ### 新增
