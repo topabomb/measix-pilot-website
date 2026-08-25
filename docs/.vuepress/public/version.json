@@ -1,23 +1,23 @@
 {
-  "version": "0.0.17",
-  "versionCode": 17,
-  "publishedAt": "2026-08-17T13:49:31Z",
-  "changelog": "## 0.0.17（versionCode 17）— 2026-08-17\n\n### 新增\n\n- `assistant_call` 可附带最多 4 个任务相关附件；第一阶段支持图片。主助手只决定传哪些，Runtime 按 Target 本次模型选择原图或 visual observation\n- 会话图片会盖上稳定 `attachment:<uuid>` 句柄，模型可在工具参数里引用；外部 HTTPS 图先落地再注入 Child\n- 子助手可按配置调用 `generate_image`；主卡片用轻量引用显示交付物，Caller 默认只拿文本和 `artifacts[]`，点名 `extras=[\"artifacts\"]` 后才按 Caller 能力拿到原图或 visual observation\n\n### 变更\n\n- `assistant_call` 进入 Coordinator 前的参数错误改为与终态一致的 `status` + `reason` 信封\n- Target 不再永久过滤 `generate_image`；未开启 `TextToImage` 或没有有效默认图片模型时仍不注册\n- Target 非交互下需审批工具自动拒绝的返回统一为 `tool_not_permitted` + `approval_unavailable` + `message`：语义为「需要审批但当前运行环境无法提供审批，不要原样重试」；只拒绝当前 ToolCall，不终止整个 Run。`ask_user` 仍走交互桥接，与审批错误协议无关\n\n---",
+  "version": "0.0.18",
+  "versionCode": 18,
+  "publishedAt": "2026-08-25T05:58:58Z",
+  "changelog": "## 0.0.18（versionCode 18）— 2026-08-23 ~ 2026-08-25\n\n### 新增\n\n- 会话 Runtime Core：`ConversationRuntime`、`ConversationReducer`、`ConversationCommandCoordinator` 与 `TurnEngine` 形成唯一命令、快照、流式投影和终态提交链；新聊天以非持久化 Draft 开始，首条消息单事务建库并晋升 Ready\n- Artifact 领域模型：数据库 v6 将 `managed_files` 收敛为 `artifact`，增加引用投影、来源和生命周期状态；`ArtifactStore` 统一负责登记、发布、引用、删除、恢复与孤儿 GC\n- typed 工具阶段：从调用参数流入、就绪、等待审批、执行到终态均有明确投影；工具卡从首个 delta 起可查看，文生图可显示排队、生成、保存和设置背景子阶段\n- `AttachmentReferenceLookup` 统一直接附件与子助手交付物索引；执行解析和 UI 缩略图共用同一 `attachment:<uuid>` 语义\n- `ConversationTitleCoordinator` 统一本地标题、模型生成、手动修改、去重、有限重试与 expected-title CAS\n- 单写、写放大、结构共享、FTS 增量、恢复、并发删除、Artifact 引用与审批继续等架构契约及回归测试\n\n### 变更\n\n- Master 与 Target 共用 `TurnEngine` 和 `TurnPipelineFactory`；durable 状态只在事务成功后发布，最后一次 checkpoint 后的流式增量也由原 Turn owner 收口\n- 会话结构操作全面改为 typed command 和窄列更新，删除整 Conversation 回写、并列持久化、旧 facade、fallback、deprecated 转发及无调用协议\n- 新 Turn 的 `START` 与审批后的 `CONTINUE_APPROVAL` 分离：继续审批保留原 `TurnHandle`，不再清理消息树、回填附件或创建第二 Turn\n- UI/ViewModel 改为依赖 application/query ports、UiModel 与 `ConversationTurnPresentation`；不直接持有 Runtime Job、DAO、ArtifactStore 或 payload 层\n- Artifact 未发布资源使用明确 owner/lease 交接，checkpoint 成功后发布，失败或取消精确回滚；Settings 图片恢复只按持久化 root 定点接管，不扫描目录\n- 删除旧 `AutoTitleGeneration`、旧附件预览扫描和两份无调用的本地 MCP transport 草稿；新增当前权威架构参考文档\n\n### 修复\n\n- 修复文生图设置助手背景时，批准和拒绝都会错误触发 `BackfillAttachmentRefs requires the active turn to finish first`\n- 修复从旧数据库升级后，Settings 仍引用的助手图片头像或背景因 Artifact metadata 缺失而丢失\n- 修复旧版本遗留的非终态 Turn 没有 owning assistant 时启动恢复失败；孤儿执行事实现在由显式恢复命令幂等收口\n- 修复取消或失败终态可能丢失最后一次 checkpoint 之后已经流出的文本或工具 delta\n- 修复 delta 节点下标、历史 reasoning 收口、Target assistant 槽归属和已终态消息被误判中断等一致性问题\n- 修复异步或强制模型标题覆盖后续手动标题，以及同值 CAS 成功被误判为失败\n- 修复附件缩略图重复扫描历史消息、子助手交付物与执行解析语义不一致的问题\n\n---",
   "downloads": [
     {
-      "name": "MeasixPilot_0.0.17_arm64-v8a-release.apk",
-      "size": "33MB",
-      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.17/MeasixPilot_0.0.17_arm64-v8a-release.apk"
-    },
-    {
-      "name": "MeasixPilot_0.0.17_universal-release.apk",
-      "size": "43MB",
-      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.17/MeasixPilot_0.0.17_universal-release.apk"
-    },
-    {
-      "name": "MeasixPilot_0.0.17_x86_64-release.apk",
+      "name": "MeasixPilot_0.0.18_arm64-v8a-release.apk",
       "size": "34MB",
-      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.17/MeasixPilot_0.0.17_x86_64-release.apk"
+      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.18/MeasixPilot_0.0.18_arm64-v8a-release.apk"
+    },
+    {
+      "name": "MeasixPilot_0.0.18_universal-release.apk",
+      "size": "43MB",
+      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.18/MeasixPilot_0.0.18_universal-release.apk"
+    },
+    {
+      "name": "MeasixPilot_0.0.18_x86_64-release.apk",
+      "size": "34MB",
+      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.18/MeasixPilot_0.0.18_x86_64-release.apk"
     }
   ]
 }

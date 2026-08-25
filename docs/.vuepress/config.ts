@@ -82,8 +82,8 @@ export default defineUserConfig({
           price: "0",
           priceCurrency: "USD",
         },
-        softwareVersion: "0.0.17",
-        datePublished: "2026-08-17",
+        softwareVersion: "0.0.18",
+        datePublished: "2026-08-25",
         featureList: [
           "隐私可控的纯本地客户端",
           "MCP 协议集成",

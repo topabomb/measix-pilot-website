@@ -17,19 +17,79 @@ Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线�
 <!-- CHANGELOG_CONTENT_START -->
 ---
 
-## 0.0.17（versionCode 17）— 2026-08-17
+## 0.0.18（versionCode 18）— 2026-08-23 ~ 2026-08-25
 
 ### 新增
 
-- `assistant_call` 可附带最多 4 个任务相关附件；第一阶段支持图片。主助手只决定传哪些，Runtime 按 Target 本次模型选择原图或 visual observation
+- 会话 Runtime Core：`ConversationRuntime`、`ConversationReducer`、`ConversationCommandCoordinator` 与 `TurnEngine` 形成唯一命令、快照、流式投影和终态提交链；新聊天以非持久化 Draft 开始，首条消息单事务建库并晋升 Ready
+- Artifact 领域模型：数据库 v6 将 `managed_files` 收敛为 `artifact`，增加引用投影、来源和生命周期状态；`ArtifactStore` 统一负责登记、发布、引用、删除、恢复与孤儿 GC
+- typed 工具阶段：从调用参数流入、就绪、等待审批、执行到终态均有明确投影；工具卡从首个 delta 起可查看，文生图可显示排队、生成、保存和设置背景子阶段
+- `AttachmentReferenceLookup` 统一直接附件与子助手交付物索引；执行解析和 UI 缩略图共用同一 `attachment:<uuid>` 语义
+- `ConversationTitleCoordinator` 统一本地标题、模型生成、手动修改、去重、有限重试与 expected-title CAS
+- 单写、写放大、结构共享、FTS 增量、恢复、并发删除、Artifact 引用与审批继续等架构契约及回归测试
+
+### 变更
+
+- Master 与 Target 共用 `TurnEngine` 和 `TurnPipelineFactory`；durable 状态只在事务成功后发布，最后一次 checkpoint 后的流式增量也由原 Turn owner 收口
+- 会话结构操作全面改为 typed command 和窄列更新，删除整 Conversation 回写、并列持久化、旧 facade、fallback、deprecated 转发及无调用协议
+- 新 Turn 的 `START` 与审批后的 `CONTINUE_APPROVAL` 分离：继续审批保留原 `TurnHandle`，不再清理消息树、回填附件或创建第二 Turn
+- UI/ViewModel 改为依赖 application/query ports、UiModel 与 `ConversationTurnPresentation`；不直接持有 Runtime Job、DAO、ArtifactStore 或 payload 层
+- Artifact 未发布资源使用明确 owner/lease 交接，checkpoint 成功后发布，失败或取消精确回滚；Settings 图片恢复只按持久化 root 定点接管，不扫描目录
+- 删除旧 `AutoTitleGeneration`、旧附件预览扫描和两份无调用的本地 MCP transport 草稿；新增当前权威架构参考文档
+
+### 修复
+
+- 修复文生图设置助手背景时，批准和拒绝都会错误触发 `BackfillAttachmentRefs requires the active turn to finish first`
+- 修复从旧数据库升级后，Settings 仍引用的助手图片头像或背景因 Artifact metadata 缺失而丢失
+- 修复旧版本遗留的非终态 Turn 没有 owning assistant 时启动恢复失败；孤儿执行事实现在由显式恢复命令幂等收口
+- 修复取消或失败终态可能丢失最后一次 checkpoint 之后已经流出的文本或工具 delta
+- 修复 delta 节点下标、历史 reasoning 收口、Target assistant 槽归属和已终态消息被误判中断等一致性问题
+- 修复异步或强制模型标题覆盖后续手动标题，以及同值 CAS 成功被误判为失败
+- 修复附件缩略图重复扫描历史消息、子助手交付物与执行解析语义不一致的问题
+
+---
+
+## 0.0.17（versionCode 17）— 2026-08-17 ~ 2026-08-22
+
+### 新增
+
+- 附件投影架构：图片按当前模型能力投影，能看图的模型保留原图，不能的得到引用行与提示，替代逐轮 OCR 改写
+- `inspect_attachments` 工具：模型不能看图且配置了附件识别模型时，按需读取附件内容返回文本
+- 附件识别模型设置项：未配置即关闭；旧 OCR 模型自动迁移，OCR 提示词设置移除
+- `assistant_call` 可附带最多 4 个任务相关附件；第一阶段支持图片。主助手只决定传哪些，Target 用自己的 resolved model 与统一投影链处理
 - 会话图片会盖上稳定 `attachment:<uuid>` 句柄，模型可在工具参数里引用；外部 HTTPS 图先落地再注入 Child
 - 子助手可按配置调用 `generate_image`；主卡片用轻量引用显示交付物，Caller 默认只拿文本和 `artifacts[]`，点名 `extras=["artifacts"]` 后才按 Caller 能力拿到原图或 visual observation
+- `TurnExecution` / `ToolExecution` 双表（DB v5，`Migration_4_5`）：每轮对话与每次工具执行的检查点与终态（COMPLETED / CANCELLED / FAILED / INCOMPLETE / INTERRUPTED / AWAITING_APPROVAL）持久化，FK 级联删除
+- 启动时在接受新聊天操作前恢复遗留进行中的轮次：标为「已中断」，结果未知的工具写不可自动重试的协议结果
+- 消息终态（取消/失败/不完整/中断）在 UI 显示明确的本地化标签；媒体保存失败显示可见占位
 
 ### 变更
 
 - `assistant_call` 进入 Coordinator 前的参数错误改为与终态一致的 `status` + `reason` 信封
+- 附件能力判定收敛到 `AttachmentProjectionTransformer`：移除 per-turn OCR observation、`artifact_delivery` 三态与 Caller 快照链；`generate_image` 结果移除模型可见的 `media_id`
+- `/upload` 注入语义修正为「会话共享文件（上传与生成的媒体）」
 - Target 不再永久过滤 `generate_image`；未开启 `TextToImage` 或没有有效默认图片模型时仍不注册
 - Target 非交互下需审批工具自动拒绝的返回统一为 `tool_not_permitted` + `approval_unavailable` + `message`：语义为「需要审批但当前运行环境无法提供审批，不要原样重试」；只拒绝当前 ToolCall，不终止整个 Run。`ask_user` 仍走交互桥接，与审批错误协议无关
+- 文件管理删除收口两套语义：新增 `ManagedFileDeletionService`，显式删除前先解除助手背景/头像等可变引用；`FilesManager` 物理删除 API 更名为 destructive 语义；「清理」改为「清空」，确认框显示实际影响
+- `generate_image` 消息卡把执行结果与文件可用性分开：生成成功但文件缺失显示「图片已生成 · 文件不可用」，`artifact_missing` 移出失败文案
+- 工具先落盘「开始执行」再真正执行，逐个提交结果；任一崩溃点后协议历史都完整合法
+- 下一次请求对非成功 assistant 回复只用安全投影：剔除未完成思考、开放工具调用和残缺 Base64，屏幕上仍完整保留原文
+- Base64 图片不再持久化进数据库：收尾时尽量转存本地文件，失败替换为 typed 占位；工具结果内嵌图片同样处理
+- 附件处理顺序调整：历史 artifact 先物化，再做附件提示注入与图片能力适配
+
+### 修复
+
+- 模型设置页：快速/图片生成/压缩模型支持清除回未配置；快速模型未设置时标题与建议回退聊天模型，不再静默失效
+- 模型设置页：标题提示词的变量说明错用建议的键，已拆分；移除死参数
+- 助手配置页：聊天模型支持清除回「跟随默认模型」；`ModelSelector` 移除不可用的死参数 `allowClear`，改为 `onClear` 回调
+- 等待工具审批不再当成一轮生成完成：不启动标题/建议等完成副作用
+- 标题、建议、置顶改为列级更新并 merge 当前 Session，避免旧 Conversation 整对象覆盖正在生成的消息树
+- Conversation 普通状态更新不再按瞬时文件差做物理 GC；压缩等生命周期操作走统一的引用检查
+- 历史 Tool artifact 缺失时保持执行 `status=completed`，只把文件标为不可用
+- 文件管理删除正被助手背景/头像引用的文件后，不再留下悬空引用（背景透明却无背景图）
+- 已完成的一轮生成不会再被误标为「已取消」（停止请求与收尾竞态）；停止已结束的生成不再残留取消原因
+- 等待审批或已有终态的 assistant 消息不再被当作无效消息移除
+- OpenAI Responses 断流/incomplete 不再统一按失败收口（其余 Provider 逐协议接入为后续工作）
 
 ---
 
