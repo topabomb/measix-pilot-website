@@ -17,11 +17,44 @@ Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线�
 <!-- CHANGELOG_CONTENT_START -->
 ---
 
+## 0.0.19（versionCode 19）— 2026-08-26 ~ 2026-09-07
+
+### 新增
+
+- MCP 工具目录可跨重启恢复，服务暂时离线时仍保留已确认的工具；设置页与会话选择器支持按服务重试、下拉刷新和连接状态查看
+- 历史工具输出支持按上下文预算自动归档或折叠，保护最近结果；归档原文可通过 `read_tool_output` / `grep_tool_output` 按需回查
+- 记忆与子助手目录随新一轮对话保存快照，当前轮次保持稳定，减少自动工具操作对请求前缀和缓存的干扰
+- 聊天切到后台后可继续生成，并通过前台通知返回；前台生成、等待审批和用户交互提供更清晰的触觉反馈
+- 文件管理支持按 7、14 或 30 天清理旧上传文件和生成图片；关闭 Workspace 终端标签前增加确认
+
+### 变更
+
+- 完成 V3 会话执行重构：主助手与子助手共用明确的轮次、模型请求步骤和工具执行协议，统一流式显示、落盘、取消及启动恢复
+- 工具参数在审批前完成解析与基础校验；审批或用户回答后沿原轮次继续，不重复创建执行链，工具状态与可回放结果分别表达
+- MCP 配置、目录与连接运行态分离，按需启动并限制并发；前后台、网络恢复与手动刷新共用生命周期，目录更新只影响后续轮次
+- MCP 目录纳入手工备份，旧目录自动迁移；浏览器授权使用本机一次性回调，完成后可返回应用
+- Token 用量按实际请求统一累计；聊天底部显示 Context、缓存占比和请求数，可展开累计量与响应速度，主助手和子助手分别统计
+- 优化聊天间距、语音播放工具栏位置与模型选择体验；修正 Qwen 3.8 视觉能力标识并更新 Kimi 图标
+- 整理架构参考与测试分层，合并重复用例，补齐关键失败路径、设备回归和构建门禁
+
+### 修复
+
+- 修复取消、断流、审批继续和进程恢复时消息、工具状态与执行记录不一致的问题，保留已收到的有效内容并准确标记未完成结果
+- 修复多步工具调用被错误合并、流式调用身份混淆、合法空结果被误判失败，以及未完成推理或工具状态被错误回放的问题
+- 修复子助手最终答案与交付物提取、图片引用和按模型能力投影不一致，以及文本转换跨请求步骤串扰的问题
+- 加强旧会话升级与备份恢复校验，损坏的消息结构或数据库结构不再覆盖现有数据
+- 修复 MCP 目录提交、分页发现、工具变更通知、并发授权及断连恢复竞态；连接地址、传输或静态请求头变更后不再沿用旧 OAuth 凭据
+- 修复多步请求与缓存场景中的 Token 重复或漏计；统计页恢复缓存命中输入量，并明确提示旧版或不完整记录
+- 修复附件能力协商、图片悬空引用、仅有工具结果的消息被判为空，以及系统注入内容误套用户模板的问题
+- 修复部分无输入的 Workspace 命令持续等待，以及旧文件清理结果显示不准确的问题
+
+---
+
 ## 0.0.18（versionCode 18）— 2026-08-23 ~ 2026-08-26
 
 ### 新增
 
-- 新增 V2 减法重构方案 `docs/dev/application-architecture-v2-plan.md`：冻结目标架构、删除账本、行数硬门禁、UI 保真矩阵与 Phase A-F 实施计划，作为后续版本重构的依据
+- 新增 V2 减法重构方案：冻结目标架构、删除账本、行数硬门禁、UI 保真矩阵与 Phase A-F 实施计划
 - 发送链路引入 `SendMessageReceipt`：发送请求被 Runtime 接受即返回稳定身份（含目标消息 id），不冒充 durable 成功
 - 会话 Runtime Core：`ConversationRuntime`、`ConversationReducer`、`ConversationCommandCoordinator` 与 `TurnEngine` 形成唯一命令、快照、流式投影和终态提交链；新聊天以非持久化 Draft 开始，首条消息单事务建库并晋升 Ready
 - Artifact 领域模型：数据库 v6 将 `managed_files` 收敛为 `artifact`，增加引用投影、来源和生命周期状态；`ArtifactStore` 统一负责登记、发布、引用、删除、恢复与孤儿 GC
@@ -44,6 +77,8 @@ Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线�
 - 同步 MiMo 推理参数、OpenRouter 会话标识、空工具 schema、DeepSeek V4 Flash Vision 识别、上下文消息限制输入及新版模型图标
 - 附件请求投影收口：`AttachmentProjectionTransformer` 固定在 Master/Target 输入链末，引用行增加 `input=native/reference_only` 标记并携带请求级 metadata；删除跨消息的全局 capability hint 与末条统一追加提示
 - 发送后到底部滚动改按目标消息身份、会话分支、列表结构与 IME 终态判定，不再用固定延时或列表长度猜测布局
+- V2 减法重构落地（待用户设备确认）：会话命令只走一条 Transition；MCP 每个服务器一条连接槽，配置、前台、网络和手动刷新共用同一套同步；Skills 单目录增删改共用同一发布协议；工作区终端读口并入查询服务，Shell 与终端共用同一套 PRoot 启动参数
+- 新增 Android 配置架构与企业下发清单，标明当前内部受管原型与企业下发边界
 
 ### 修复
 
@@ -391,7 +426,7 @@ Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线�
 
 - MCP SDK 0.13.0 → 0.14.0
 - MCP UI 文本统一为"MCP"，Loading 指示器修复为按配置精确匹配
-- MCP OAuth 健壮性增强（Job 自杀修复、连接泄露修复、清除授权立即断开），详见 `docs/dev/mcp-lifecycle-analysis.md` 第十四章
+- MCP OAuth 健壮性增强（Job 自杀修复、连接泄露修复、清除授权立即断开）
 - 压缩上下文对话框保留消息数改为手动输入（OutlinedNumberInput 替换分段按钮）
 - Compose BOM 2026.06.00→2026.06.01、Material3 1.5.0-alpha22→1.5.0-alpha23、Navigation3 1.1.2→1.1.4
 - 预存偏离对齐：material3AdaptiveNav3 1.3.0-beta02→1.3.0-rc01、lifecycleViewmodelNav3 2.10.0→2.11.0、lifecycleRuntimeKtx 2.10.0→2.11.0
@@ -437,8 +472,6 @@ Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线�
 ## 0.0.7（versionCode 7）— 2026-06-27/28
 
 ### MCP 生命周期架构级重构
-
-> 详细技术分析见 `docs/dev/mcp-lifecycle-analysis.md`，本节为功能摘要。
 
 **三条恢复链**覆盖移动端全部场景：① settings 变更 → add/remove Client；② `ProcessLifecycleOwner.onStart` → syncAll 健康检查；③ `ConnectivityManager.NetworkCallback.onAvailable` → syncAll（WiFi↔蜂窝切换，比 transport.onClose 快 10-30s）。
 
