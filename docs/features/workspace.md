@@ -44,7 +44,7 @@ HTML 当前以源码查看。各入口有格式、大小与授权限制；远程
 
 ![报告、源码、目录与图表的连续操作](/pilot/walkthrough.gif)
 
-[查看 MP4](/pilot/walkthrough.mp4)。真实模拟器连续录屏，1.25 倍速、无声，展示已生成文件的检查过程。
+<a :href="$withBase('/pilot/walkthrough.mp4')">查看 MP4</a>。真实模拟器连续录屏，1.25 倍速、无声，展示已生成文件的检查过程。
 
 </details>
 

@@ -20,6 +20,7 @@ pnpm build
 2. Release 工作流使用 `WEBSITE_SYNC_TOKEN` 向本仓库发送 `app-release` repository_dispatch。
 3. `.github/workflows/sync-from-release.yml` 更新静态 `docs/.vuepress/public/version.json`、`docs/changelog/index.md` 与 `config.ts` 的版本及日期，再提交推送。
 4. Vercel 构建部署后，核对线上 `/version.json` 的版本、versionCode、说明、APK 地址与大小；同时检查下载页、更新日志和首页。dispatch 成功不代表线上更新成功。
+5. 同步工作流成功后，Pages 备用部署重新读取 `main`。它使用 `SITE_BASE=/measix-pilot-website/` 和 `SITE_HOSTNAME=https://topabomb.github.io` 构建；Vercel 默认使用根路径。两站都要核对版本与资源路径，不能依赖机器人提交再次触发 push 工作流。
 
 本仓库当前没有动态版本 API 或客户端 Release 组件。不要手动维护第二份版本事实，也不要把旧的 Serverless 设计当作当前实现。
 

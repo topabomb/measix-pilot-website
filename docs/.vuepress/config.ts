@@ -9,7 +9,7 @@ const SITE_KEYWORDS =
   "Measix Pilot,领航,小睿助手,Android,Agent Harness,MCP,长任务,多模态,文件管理,Runcove,Orchelm,折叠屏,平板,开源,AGPL";
 
 export default defineUserConfig({
-  base: "/",
+  base: process.env.SITE_BASE || "/",
   lang: "zh-CN",
   title: "Measix Pilot",
   subtitle: "小睿助手",
@@ -117,6 +117,9 @@ export default defineUserConfig({
 
     repo: "topabomb/rikkahub_mcp",
     repoLabel: "GitHub",
+    docsRepo: "topabomb/measix-pilot-website",
+    docsBranch: "main",
+    docsDir: "docs",
 
     navbar: [
       { text: "首页", link: "/" },
@@ -230,7 +233,7 @@ export default defineUserConfig({
         type: "katex",
       },
       sitemap: {
-        hostname: SITE_URL,
+        hostname: process.env.SITE_HOSTNAME || SITE_URL,
         changefreq: "weekly",
         priority: 0.8,
         exclude: ["/404.html"],

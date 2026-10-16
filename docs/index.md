@@ -47,8 +47,8 @@ features:
 ## 同一项工作，手机上跟进，宽屏上展开
 
 <p align="center">
-  <a href="/pilot/chat-wide.png"><img src="/pilot/chat-wide.png" width="560" alt="Pilot 宽屏模拟器截图：会话列表与巡检报告双栏显示"></a>
-  <a href="/pilot/chat-phone.png"><img src="/pilot/chat-phone.png" width="175" alt="同一项巡检任务的手机界面"></a>
+  <a :href="$withBase('/pilot/chat-wide.png')"><img :src="$withBase('/pilot/chat-wide.png')" width="560" alt="Pilot 宽屏模拟器截图：会话列表与巡检报告双栏显示"></a>
+  <a :href="$withBase('/pilot/chat-phone.png')"><img :src="$withBase('/pilot/chat-phone.png')" width="175" alt="同一项巡检任务的手机界面"></a>
 </p>
 
 通过 Orchelm 调用真实模型与 Runcove 工具，在独立演示目录生成 CSV、Markdown 报告和 SVG 图表，再从 Pilot 检查成果。截图来自 0.0.20 源码的 Debug 模拟器，巡检数值为演示数据。

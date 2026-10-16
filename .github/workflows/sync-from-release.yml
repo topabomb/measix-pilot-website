@@ -46,24 +46,18 @@ jobs:
         id: payload
         env:
           PAYLOAD_JSON: ${{ toJSON(github.event.client_payload) }}
+          INPUTS_JSON: ${{ toJSON(inputs) }}
         run: |
           mkdir -p /tmp/payload
 
-          if [ -n "$PAYLOAD_JSON" ]; then
-            # repository_dispatch: client_payload 是 JSON 对象，用 jq 提取各字段
-            echo "$PAYLOAD_JSON" | jq -r '.version'      > /tmp/payload/version
-            echo "$PAYLOAD_JSON" | jq -r '.versionCode'   > /tmp/payload/versionCode
-            echo "$PAYLOAD_JSON" | jq -r '.publishedAt'   > /tmp/payload/publishedAt
-            echo "$PAYLOAD_JSON" | jq -r '.changelog'     > /tmp/payload/changelog
-            echo "$PAYLOAD_JSON" | jq -c '.downloads'     > /tmp/payload/downloads
-          else
-            # workflow_dispatch: inputs 是字符串，直接写入
-            printf '%s' '${{ inputs.version }}'       > /tmp/payload/version
-            printf '%s' '${{ inputs.versionCode }}'    > /tmp/payload/versionCode
-            printf '%s' '${{ inputs.publishedAt }}'    > /tmp/payload/publishedAt
-            printf '%s' '${{ inputs.changelog }}'      > /tmp/payload/changelog
-            printf '%s' '${{ inputs.downloads }}'      > /tmp/payload/downloads
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            PAYLOAD_JSON="$INPUTS_JSON"
           fi
+          printf '%s' "$PAYLOAD_JSON" | jq -r '.version' > /tmp/payload/version
+          printf '%s' "$PAYLOAD_JSON" | jq -r '.versionCode' > /tmp/payload/versionCode
+          printf '%s' "$PAYLOAD_JSON" | jq -r '.publishedAt' > /tmp/payload/publishedAt
+          printf '%s' "$PAYLOAD_JSON" | jq -r '.changelog' > /tmp/payload/changelog
+          printf '%s' "$PAYLOAD_JSON" | jq -c '.downloads | if type == "string" then fromjson else . end' > /tmp/payload/downloads
 
           echo "version=$(cat /tmp/payload/version)"
           echo "versionCode=$(cat /tmp/payload/versionCode)"
