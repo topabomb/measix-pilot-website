@@ -35,3 +35,10 @@
   background: linear-gradient(135deg, #6d28e9 0%, #4a7de0 100%);
   box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
 }
+
+/* Keep the short Chinese product name together on narrow phones. */
+@media (max-width: 375px) {
+  .vp-hero-title {
+    font-size: 1.75rem;
+  }
+}
