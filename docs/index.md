@@ -1,81 +1,70 @@
 ---
 home: true
-hero:
-  name: Measix Pilot
-  text: 小睿助手
-  tagline: 隐私可控的纯本地 Android AI 客户端 — 你的数据不出设备，AI 能力不设上限
-  image:
-    logo: /logo.svg
-  actions:
-    - text: 立即下载
-      icon: download
-      link: /download/
-      type: primary
-    - text: 了解功能
-      icon: lightbulb
-      link: /features/
-    - text: 查看源码
-      icon: brands/github
-      link: https://github.com/topabomb/rikkahub_mcp
-
+heroText: Measix Pilot · 领航
+heroImage: /pilot/logo.svg
+heroAlt: Measix Pilot
+heroImageStyle:
+  max-height: 140px
+tagline: 原生 Android Agent Harness · 小睿助手。把 Agent 带到现场，把工作推进到结果。
+actions:
+  - text: 下载与安装
+    icon: download
+    link: /download/
+    type: primary
+  - text: 开始使用
+    icon: play
+    link: /guide/getting-started.md
+  - text: 查看源码
+    icon: brands/github
+    link: https://github.com/topabomb/rikkahub_mcp
 features:
-  - title: 隐私可控 · 纯本地客户端
-    icon: shield-halved
-    details: 所有密钥、对话记录和配置仅存储在你的手机上。无需注册账号，无云端中转，无遥测上报。你拥有数据的完全控制权，卸载即彻底清除。
-    link: /features/privacy.md
-
-  - title: MCP 协议 · 让 AI 能动手做事
-    icon: plug
-    details: 原生支持 Model Context Protocol，AI 可以连接外部工具服务——搜索网页、管理日历、操作文件。网络切换或冷启动后自动恢复连接，稳稳当当。
-    link: /features/mcp.md
-
-  - title: 子助手 · AI 间的分工协作
+  - title: 多步任务与人工确认
     icon: users-gear
-    details: 主助手可以把子任务交给专门的子助手去完成，各自拥有独立的人设和工具权限。比如让「翻译助手」处理外文、「代码助手」写脚本，互不干扰。
-    link: /features/sub-assistant.md
-
-  - title: Linux 工作空间 · 口袋里的 AI 工作站
-    icon: box
-    details: 手机上运行完整的 Linux 环境，AI 可以执行命令、写代码、处理文件。上传一个 CSV，让 AI 帮你分析数据、画图表——全在手机上完成。
-    link: /features/workspace.md
-
-  - title: 文生图 · 用文字创作图片
-    icon: wand-magic-sparkles
-    details: 在对话中直接让 AI 生成图片，支持设为聊天背景。还能上传图片、PDF、Word 文档让 AI 理解和分析，支持 HEIC 等现代图片格式。
-    link: /features/image-gen.md
-
-  - title: 折叠屏 · 平板 · 手机全适配
-    icon: mobile-screen
-    details: 展开折叠屏自动变成双栏布局，半折放置在桌面时聊天显示在上半屏。矮横屏自动切换紧凑输入。无论什么设备形态，体验都恰到好处。
-    link: /features/adaptive-ui.md
-
-  - title: 多模型对话 · 一个 App 搞定所有
-    icon: comments
-    details: 支持 OpenAI、Gemini、Claude、DeepSeek、月之暗面等主流大模型。切换模型就像切换聊天窗口一样简单，对话分支让你自由探索不同回复。
-    link: /features/providers.md
-
-  - title: 原生渲染 · 公式图表一目了然
-    icon: markdown
-    details: 代码高亮、LaTeX 数学公式、Mermaid 流程图全部原生渲染，不需要联网加载。技术文档、数学公式、流程图在手机上也能清晰展示。
-    link: /features/rendering.md
-
-  - title: 工具审批 · 安全始终你说了算
-    icon: shield-check
-    details: AI 调用工具前可以要求你确认。搜索等安全操作自动执行，写文件、执行命令等操作需要你点头。超时不会中断对话，稳稳当当。
+    details: 连续调用模型和工具，按需交给子助手；审批或补充信息后在当前任务中继续，随时查看执行过程。
     link: /features/tool-calling.md
-
-  - title: 技能扩展 · 按需加载能力
+  - title: 带着现场资料开始
+    icon: image
+    details: 照片、PDF、文档和任务说明进入同一工作流程，识别、生成和工具能力由所选模型与权限决定。
+    link: /features/multimodal.md
+  - title: 手机顺手，宽屏展开
+    icon: mobile-screen
+    details: Kotlin / Compose 原生体验，窗口宽高与折叠姿态共同决定布局，手机、平板与多窗口各有合适的呈现。
+    link: /features/adaptive-ui.md
+  - title: 工作文件随手检查
+    icon: box
+    details: 本地 Workspace、WebDAV 与企业文件管理，支持文本编辑、Markdown/SVG、图片、PDF 与音视频预览。
+    link: /features/workspace.md
+  - title: 上下文与工具按任务组织
     icon: puzzle-piece
-    details: 通过 Skills 系统为 AI 添加自定义能力，跨工作区共享，按需启用。像给 AI 装上可拆卸的技能包。
-    link: /features/skills.md
-
-  - title: 语音合成 · 让 AI 开口说话
-    icon: volume-high
-    details: 支持 OpenAI、小米 MiMo 等多种语音引擎，AI 回复可以自动朗读。同一轮多次语音按顺序播放，可调节速度，中文朗读自然流畅。
-    link: /features/tts.md
-
-  - title: 备份同步 · 数据安全不丢失
-    icon: cloud
-    details: 支持 WebDAV、S3 等云端备份，也可本地导出。助手配置、MCP 设置、对话记录完整可恢复，换机无忧。
-    link: /features/backup.md
+    details: 保存上下文来源，同一轮复用指令与工具定义，历史工具输出滚动压缩，记忆在新请求边界对账。
+    link: /features/enterprise.md#上下文与长任务
+  - title: 独立使用，也能进入组织工作
+    icon: plug
+    details: 配置自己的模型与工具，或接入 Orchelm 使用组织发布的助手、资源与经验；通过 Runcove 扩展远端工作环境。
+    link: /features/enterprise.md
 ---
+
+## 同一项工作，手机上跟进，宽屏上展开
+
+<p align="center">
+  <a href="/pilot/chat-wide.png"><img src="/pilot/chat-wide.png" width="560" alt="Pilot 宽屏模拟器截图：会话列表与巡检报告双栏显示"></a>
+  <a href="/pilot/chat-phone.png"><img src="/pilot/chat-phone.png" width="175" alt="同一项巡检任务的手机界面"></a>
+</p>
+
+通过 Orchelm 调用真实模型与 Runcove 工具，在独立演示目录生成 CSV、Markdown 报告和 SVG 图表，再从 Pilot 检查成果。截图来自 0.0.20 源码的 Debug 模拟器，巡检数值为演示数据。
+
+[查看报告与操作演示](/features/workspace.md#检查生成的成果) · [个人与企业使用指南](/features/enterprise.md)
+
+## 从现场事实，到可以带走的成果
+
+![Pilot 工作流程示意：带入资料、推进工作、检查成果](/pilot/pilot-hero.svg)
+
+Pilot 在 Android 本地承接模型请求、多步工具执行、审批、子助手、文件处理与执行记录。配置自己的模型即可独立使用；需要企业能力时，再接入组织的 Orchelm。
+
+## Measix 产品家族
+
+![Measix 七大产品职责图](/pilot/measix-products.svg)
+
+**领航 Pilot** 承接原生移动与现场工作；[**松子 Tuck**](https://github.com/topabomb/measix-tuck) 提供自托管浏览器 Agent 工作台；[**工舱 Runcove**](https://github.com/topabomb/measix-runcove) 提供持久远端工作空间。
+
+**枢策 Orchelm** 负责企业能力供给与治理，**知衡 Noetral** 面向工业领域模型与专业任务，**衡准 Metrivon** 承接精密测量与设备协同，**溯原 Tracelle** 承接数据归档、追溯与分析。各产品按需组合，实际接入范围以版本和部署为准。

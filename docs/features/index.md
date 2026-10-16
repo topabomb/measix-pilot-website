@@ -8,19 +8,25 @@ category: 功能介绍
 
 # 功能特性概览
 
-> Measix Pilot（小睿助手）是一款**隐私可控的纯本地** Android AI 客户端。你的数据不出设备，AI 能力不设上限。
+Measix Pilot · 领航（小睿助手）是原生 Android Agent Harness，面向长任务、现场资料、宽屏操作、文件处理与企业协作。
 
 ## 核心特色
 
-### 🔒 隐私可控，数据不出设备
+### 个人与企业工作
 
-所有密钥、对话记录、助手配置仅存储在你的手机本地。无需注册账号，无云端中转，无遥测上报。网络请求直接发往你配置的 AI 服务商，不经过任何中间服务器。
+配置自己的模型和工具独立使用，或接入 Orchelm 复用组织的助手、资源与经验；Runcove 提供远端执行与文件环境。
+
+[了解个人与企业工作 →](./enterprise.md)
+
+### 数据与隐私
+
+会话与用户配置保存在设备上；模型、工具、企业资源和主动备份按配置联网。资料的服务去向与组织边界应在使用前明确。
 
 [了解详情 →](./privacy.md)
 
 ### 🔌 MCP 协议，让 AI 能动手做事
 
-Measix Pilot 是少数原生支持 MCP（Model Context Protocol）的移动端客户端。AI 可以连接外部工具服务——搜索网页、管理日历、操作文件。网络切换或冷启动后自动恢复连接。
+Pilot 原生支持 MCP（Model Context Protocol）。AI 可以连接外部工具服务——搜索网页、管理日历、操作文件。网络切换或冷启动后自动恢复连接。
 
 [了解详情 →](./mcp.md)
 
@@ -52,7 +58,7 @@ Measix Pilot 是少数原生支持 MCP（Model Context Protocol）的移动端�
 
 <CardGrid :columns="3">
   <Card icon="shield-halved" title="隐私可控" link="./privacy.md">
-    纯本地客户端，数据不出设备
+    设备存储、服务去向与空间授权
   </Card>
   <Card icon="comments" title="多模型对话" link="./providers.md">
     OpenAI / Gemini / Claude / DeepSeek

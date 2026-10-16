@@ -8,16 +8,18 @@ category: 关于
 
 # 关于 Measix Pilot
 
-> Measix Pilot（小睿助手）— **隐私可控的纯本地** Android AI 客户端，让 AI 真正成为你的移动伙伴。
+Measix Pilot · 领航（小睿助手）是面向移动与现场工作的原生 Android Agent Harness。
 
 ## 项目定位
 
-Measix Pilot 致力于为移动端用户提供**隐私可控、功能丰富、体验原生**的 AI 对话体验。核心理念：
+- **推进实际任务**：模型请求、多步工具、子助手与人工确认组成完整工作流程。
+- **处理资料与成果**：多模态输入、本地 Linux、WebDAV 与企业文件管理，生成后直接检查和带走文件。
+- **原生移动体验**：手机、平板、多窗口与折叠姿态按可用空间调整布局。
+- **个人与组织协作**：独立配置模型与工具，也可通过 Orchelm 使用组织能力，并连接 Runcove 远端环境。
 
-- **隐私优先**：数据不出设备，无账号、无遥测、无云端中转
-- **本地能力**：Linux 工作空间、子助手协同、文生图等本地工具
-- **开放协议**：MCP 协议深度集成，连接外部工具生态
-- **全形态适配**：手机、折叠屏、平板深度自适应
+![Measix 七大产品职责图](/pilot/measix-products.svg)
+
+Pilot 是 Measix 的移动入口，Tuck 是浏览器 Agent 工作台，Runcove 是持久工作空间；Orchelm、Noetral、Metrivon、Tracelle 分别承接组织治理、领域模型、精密测量与数据追溯。具体职责与接入见 [产品仓库](https://github.com/topabomb/rikkahub_mcp#measix-七大产品)。
 
 ## 项目背景
 
@@ -34,7 +36,7 @@ Measix Pilot 由 [topabomb](https://github.com/topabomb) 创建，是 [RikkaHub]
 
 ## 开源许可
 
-本项目基于 [AGPL-3.0](https://github.com/topabomb/rikkahub_mcp/blob/main/LICENSE) 许可证开源，源代码完全公开，欢迎审计和贡献。
+本项目基于 [AGPL-3.0](https://github.com/topabomb/rikkahub_mcp/blob/master/LICENSE) 许可证开源，源代码完全公开，欢迎审计和贡献。
 
 ## 链接
 

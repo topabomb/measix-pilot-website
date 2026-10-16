@@ -4,9 +4,9 @@ import { hopeTheme } from "vuepress-theme-hope";
 
 const SITE_URL = "https://measix-pilot.weero.net";
 const SITE_DESCRIPTION =
-  "Measix Pilot（小睿助手）— 隐私可控的纯本地 Android AI 客户端。数据不出设备，支持 MCP 协议连接外部工具、子助手分工协作、Linux 工作空间、文生图、折叠屏适配，让 AI 真正成为你的移动伙伴。";
+  "Measix Pilot · 领航（小睿助手）— 原生 Android Agent Harness。多步任务、多模态资料、宽屏与折叠屏、文件管理，以及 Runcove 与 Orchelm 协作，把 Agent 带到现场。";
 const SITE_KEYWORDS =
-  "Measix Pilot,小睿助手,Android AI客户端,本地AI,隐私可控,MCP协议,AI助手,子助手,Linux工作空间,文生图,折叠屏,平板适配,OpenAI,Gemini,Claude,DeepSeek,开源,AGPL";
+  "Measix Pilot,领航,小睿助手,Android,Agent Harness,MCP,长任务,多模态,文件管理,Runcove,Orchelm,折叠屏,平板,开源,AGPL";
 
 export default defineUserConfig({
   base: "/",
@@ -24,7 +24,7 @@ export default defineUserConfig({
       "meta",
       {
         property: "og:title",
-        content: "Measix Pilot — 隐私可控的纯本地 Android AI 客户端",
+        content: "Measix Pilot · 领航 — 原生 Android Agent Harness",
       },
     ],
     ["meta", { property: "og:description", content: SITE_DESCRIPTION }],
@@ -41,7 +41,7 @@ export default defineUserConfig({
       "meta",
       {
         name: "twitter:title",
-        content: "Measix Pilot — 隐私可控的纯本地 Android AI 客户端",
+        content: "Measix Pilot · 领航 — 原生 Android Agent Harness",
       },
     ],
     ["meta", { name: "twitter:description", content: SITE_DESCRIPTION }],
@@ -85,10 +85,11 @@ export default defineUserConfig({
         softwareVersion: "0.0.19",
         datePublished: "2026-09-07",
         featureList: [
-          "隐私可控的纯本地客户端",
+          "原生 Android Agent Harness",
           "MCP 协议集成",
           "子助手协同与委托",
-          "Linux 工作空间",
+          "本地与远程工作空间",
+          "个人与企业空间",
           "文生图",
           "折叠屏平板手机全适配",
           "多模型对话",
@@ -101,8 +102,8 @@ export default defineUserConfig({
   bundler: viteBundler(),
 
   theme: hopeTheme({
-    logo: "/logo.svg",
-    favicon: "/logo.svg",
+    logo: "/pilot/logo.svg",
+    favicon: "/pilot/logo.svg",
 
     themeColor: {
       blue: "#5b8def",
@@ -144,12 +145,13 @@ export default defineUserConfig({
           prefix: "/features/",
           children: [
             { text: "概览", link: "", icon: "lightbulb" },
-            { text: "隐私可控", link: "privacy.md", icon: "shield-halved" },
+            { text: "数据与隐私", link: "privacy.md", icon: "shield-halved" },
+            { text: "个人与企业工作", link: "enterprise.md", icon: "building" },
             { text: "多模型对话", link: "providers.md", icon: "comments" },
             { text: "MCP 协议", link: "mcp.md", icon: "plug" },
             { text: "子助手协同", link: "sub-assistant.md", icon: "users-gear" },
             { text: "工具调用与审批", link: "tool-calling.md", icon: "shield-check" },
-            { text: "Linux 工作空间", link: "workspace.md", icon: "box" },
+            { text: "工作空间与文件", link: "workspace.md", icon: "box" },
             { text: "消息与渲染", link: "rendering.md", icon: "markdown" },
             { text: "多模态输入", link: "multimodal.md", icon: "image" },
             { text: "全文搜索", link: "search.md", icon: "search" },

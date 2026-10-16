@@ -1,115 +1,30 @@
 # Measix Pilot 官方网站
 
-> Measix Pilot（小睿助手）官方网站，基于 [VuePress Theme Hope](https://theme-hope.vuejs.press/) 构建。
+Measix Pilot · 领航（小睿助手）的产品介绍、使用指南、下载和更新日志，基于 VuePress 2 / Theme Hope 构建。
 
-## 简介
+## 开发与构建
 
-本仓库是 Measix Pilot 的官方网站，提供：
+使用 Node 22 与 pnpm 10：
 
-- 🏠 **产品首页**：功能概览和下载入口
-- ✨ **功能特性**：详细的功能介绍和说明
-- 📖 **使用指南**：快速上手和进阶配置
-- 📥 **下载页面**：APK 下载和系统要求
-- 📝 **更新日志**：动态从 GitHub Releases 获取，无需手动维护
-- 🔗 **版本检查**：Vercel Serverless Function 动态返回最新版本信息
-
-## 技术栈
-
-- [VuePress 2](https://vuepress.vuejs.press/) - 静态站点生成器
-- [VuePress Theme Hope](https://theme-hope.vuejs.press/) - 主题
-- [Vite](https://vitejs.dev/) - 打包器
-- [pnpm](https://pnpm.io/) - 包管理器
-
-## 本地开发
-
-```bash
-# 安装依赖
-pnpm install
-
-# 启动开发服务器
+```sh
+pnpm install --frozen-lockfile
 pnpm dev
-
-# 构建生产版本
 pnpm build
-
-# 清理缓存
-pnpm clean
 ```
 
-构建输出目录为 `dist/`。
+生产输出目录为 `dist/`。主部署为 Vercel（`https://measix-pilot.weero.net`），GitHub Pages 为备用部署。
 
-## 部署
+## 发行同步
 
-### Vercel（主部署）
+1. Android 仓库通过正式 Release 工作流验证并发布签名 APK。
+2. Release 工作流使用 `WEBSITE_SYNC_TOKEN` 向本仓库发送 `app-release` repository_dispatch。
+3. `.github/workflows/sync-from-release.yml` 更新静态 `docs/.vuepress/public/version.json`、`docs/changelog/index.md` 与 `config.ts` 的版本及日期，再提交推送。
+4. Vercel 构建部署后，核对线上 `/version.json` 的版本、versionCode、说明、APK 地址与大小；同时检查下载页、更新日志和首页。dispatch 成功不代表线上更新成功。
 
-本网站部署在 [Vercel](https://vercel.com/) 上：
+本仓库当前没有动态版本 API 或客户端 Release 组件。不要手动维护第二份版本事实，也不要把旧的 Serverless 设计当作当前实现。
 
-- 构建命令：`pnpm build`
-- 输出目录：`dist`
-- Node 版本：22
+## 内容与素材
 
-### GitHub Pages（备用）
+产品能力以 [Android 当前实现](https://github.com/topabomb/rikkahub_mcp) 为准；发布时同步首页、功能入口、系统要求和企业使用边界。截图及图表来自 Android 仓库的 `docs/assets/readme/`，网站副本位于 `docs/.vuepress/public/pilot/`，来源信息由 Android 仓库维护。
 
-本仓库也配置了 GitHub Actions 工作流，可作为备用部署方式。
-
-## 动态数据
-
-本网站的两个数据端点均**动态**从 GitHub Releases API 获取，无需手动维护：
-
-- **`/changelog/`**：Vue 组件客户端拉取 GitHub Releases，动态渲染更新日志
-- **`/version.json`**：Vercel Serverless Function（`api/version.ts`）服务端拉取 GitHub Releases API，返回版本信息（含 10 分钟缓存）
-
-`rikkahub_mcp` 发布新 Release 后，网站自动获取最新数据，无需任何联动触发。
-
-## 项目结构
-
-```
-measix-pilot-website/
-├── docs/
-│   ├── .vuepress/
-│   │   ├── components/
-│   │   │   └── ChangelogReleases.vue  # 动态更新日志组件
-│   │   ├── config.ts          # VuePress 配置
-│   │   └── public/
-│   │       └── logo.svg       # Logo
-│   ├── about/
-│   │   └── index.md            # 关于
-│   ├── changelog/
-│   │   └── index.md           # 更新日志
-│   ├── download/
-│   │   └── index.md           # 下载页
-│   ├── features/
-│   │   ├── index.md           # 功能概览
-│   │   ├── providers.md       # 多 Provider 对话
-│   │   ├── mcp.md            # MCP 协议
-│   │   ├── tool-calling.md    # 工具调用与审批
-│   │   ├── workspace.md       # 工作空间沙箱
-│   │   ├── rendering.md       # 消息渲染引擎
-│   │   ├── multimodal.md     # 多模态输入
-│   │   ├── search.md         # 全文搜索
-│   │   ├── backup.md         # 备份与同步
-│   │   ├── image-gen.md      # AI 生图
-│   │   ├── skills.md         # Skills 系统
-│   │   ├── tts.md            # 语音合成
-│   │   └── adaptive-ui.md    # 自适应 UI
-│   ├── guide/
-│   │   ├── getting-started.md # 快速开始
-│   │   ├── providers.md      # 配置 Provider
-│   │   ├── mcp.md           # MCP 工具配置
-│   │   ├── workspace.md     # 工作空间使用
-│   │   └── backup.md        # 备份与同步配置
-│   └── index.md              # 首页
-├── api/
-│   └── version.ts           # Vercel Serverless Function（动态版本信息）
-├── dev-docs/                # 本地开发文档（git 排除）
-├── .github/workflows/
-│   ├── sync-from-release.yml  # Release 同步工作流
-│   └── deploy-pages.yml      # GitHub Pages 部署工作流
-├── package.json
-├── vercel.json
-└── README.md
-```
-
-## 许可证
-
-[AGPL-3.0](LICENSE)
+真实接入材料、凭据、签名配置不进入网站或仓库。模拟业务数据须明确标注；本地预览不能代替线上部署验收。
