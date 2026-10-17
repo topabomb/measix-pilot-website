@@ -7,17 +7,17 @@
     {
       "name": "MeasixPilot_0.0.20_arm64-v8a-release.apk",
       "size": "36MB",
-      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.20/MeasixPilot_0.0.20_arm64-v8a-release.apk"
+      "url": "https://github.com/topabomb/measix-pilot/releases/download/v0.0.20/MeasixPilot_0.0.20_arm64-v8a-release.apk"
     },
     {
       "name": "MeasixPilot_0.0.20_universal-release.apk",
       "size": "45MB",
-      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.20/MeasixPilot_0.0.20_universal-release.apk"
+      "url": "https://github.com/topabomb/measix-pilot/releases/download/v0.0.20/MeasixPilot_0.0.20_universal-release.apk"
     },
     {
       "name": "MeasixPilot_0.0.20_x86_64-release.apk",
       "size": "36MB",
-      "url": "https://github.com/topabomb/rikkahub_mcp/releases/download/v0.0.20/MeasixPilot_0.0.20_x86_64-release.apk"
+      "url": "https://github.com/topabomb/measix-pilot/releases/download/v0.0.20/MeasixPilot_0.0.20_x86_64-release.apk"
     }
   ]
 }

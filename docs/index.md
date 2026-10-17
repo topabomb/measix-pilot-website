@@ -16,7 +16,7 @@ actions:
     link: /guide/getting-started.md
   - text: 查看源码
     icon: brands/github
-    link: https://github.com/topabomb/rikkahub_mcp
+    link: https://github.com/topabomb/measix-pilot
 features:
   - title: 多步任务与人工确认
     icon: users-gear

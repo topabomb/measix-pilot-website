@@ -26,6 +26,6 @@ pnpm build
 
 ## 内容与素材
 
-产品能力以 [Android 当前实现](https://github.com/topabomb/rikkahub_mcp) 为准；发布时同步首页、功能入口、系统要求和企业使用边界。截图及图表来自 Android 仓库的 `docs/assets/readme/`，网站副本位于 `docs/.vuepress/public/pilot/`，来源信息由 Android 仓库维护。
+产品能力以 [Android 当前实现](https://github.com/topabomb/measix-pilot) 为准；发布时同步首页、功能入口、系统要求和企业使用边界。截图及图表来自 Android 仓库的 `docs/assets/readme/`，网站副本位于 `docs/.vuepress/public/pilot/`，来源信息由 Android 仓库维护。
 
 真实接入材料、凭据、签名配置不进入网站或仓库。模拟业务数据须明确标注；本地预览不能代替线上部署验收。

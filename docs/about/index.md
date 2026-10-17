@@ -19,13 +19,13 @@ Measix Pilot · 领航（小睿助手）是面向移动与现场工作的原生 
 
 ![Measix 七大产品职责图](/pilot/measix-products.svg)
 
-Pilot 是 Measix 的移动入口，Tuck 是浏览器 Agent 工作台，Runcove 是持久工作空间；Orchelm、Noetral、Metrivon、Tracelle 分别承接组织治理、领域模型、精密测量与数据追溯。具体职责与接入见 [产品仓库](https://github.com/topabomb/rikkahub_mcp#measix-七大产品)。
+Pilot 是 Measix 的移动入口，Tuck 是浏览器 Agent 工作台，Runcove 是持久工作空间；Orchelm、Noetral、Metrivon、Tracelle 分别承接组织治理、领域模型、精密测量与数据追溯。具体职责与接入见 [产品仓库](https://github.com/topabomb/measix-pilot#measix-七大产品)。
 
 ## 项目背景
 
-Measix Pilot 由 [topabomb](https://github.com/topabomb) 创建，是 [RikkaHub](https://github.com/rikkahub/rikkahub)（原作者 [re-ovo](https://github.com/re-ovo)）的 fork。
+Measix Pilot 由 [topabomb](https://github.com/topabomb) 维护，源自 [RikkaHub](https://github.com/rikkahub/rikkahub)（原作者 [re-ovo](https://github.com/re-ovo)），现围绕移动 Agent、长任务和企业协作独立演进。
 
-- **Fork 日期**：2026 年 6 月
+- **项目起始**：2026 年 6 月
 
 ## 相比原项目的调整
 
@@ -36,11 +36,11 @@ Measix Pilot 由 [topabomb](https://github.com/topabomb) 创建，是 [RikkaHub]
 
 ## 开源许可
 
-本项目基于 [AGPL-3.0](https://github.com/topabomb/rikkahub_mcp/blob/master/LICENSE) 许可证开源，源代码完全公开，欢迎审计和贡献。
+本项目基于 [AGPL-3.0](https://github.com/topabomb/measix-pilot/blob/master/LICENSE) 许可证开源，源代码完全公开，欢迎审计和贡献。
 
 ## 链接
 
-- **GitHub 仓库**：[topabomb/rikkahub_mcp](https://github.com/topabomb/rikkahub_mcp)
+- **GitHub 仓库**：[topabomb/measix-pilot](https://github.com/topabomb/measix-pilot)
 - **上游项目**：[rikkahub/rikkahub](https://github.com/rikkahub/rikkahub)
 - **在线站点**：[measix-pilot.weero.net](https://measix-pilot.weero.net/)
 

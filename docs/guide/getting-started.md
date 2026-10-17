@@ -12,7 +12,7 @@ category: 使用指南
 
 ## 第一步：安装
 
-1. 从 [GitHub Releases](https://github.com/topabomb/rikkahub_mcp/releases) 下载最新版 APK
+1. 从 [GitHub Releases](https://github.com/topabomb/measix-pilot/releases) 下载最新版 APK
 2. 允许「安装未知来源应用」
 3. 安装并打开应用
 

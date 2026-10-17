@@ -39,4 +39,4 @@ Pilot 在设备上管理会话和用户配置，并连接你选择的模型与�
 
 设置页对部分敏感字段提供遮罩，诊断脱敏凭据；复制日志、分享图片或导出文件前仍应检查内容。API Key 会用于相应服务的认证，不应把“保存在设备”理解为“不会发送给服务”。
 
-源代码和当前数据契约见 [公开仓库](https://github.com/topabomb/rikkahub_mcp) 与 [数据持久化参考](https://github.com/topabomb/rikkahub_mcp/blob/master/docs/references/data-persistence.md)。
+源代码和当前数据契约见 [公开仓库](https://github.com/topabomb/measix-pilot) 与 [数据持久化参考](https://github.com/topabomb/measix-pilot/blob/master/docs/references/data-persistence.md)。

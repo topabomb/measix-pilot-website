@@ -40,4 +40,4 @@ Pilot 是原生 Android Agent Harness。个人模型和工具、组织发布的�
 
 切换页面或退到后台时，任务可继续运行并通过前台通知返回。后台运行受 Android 系统限制；进程终止后重启会标记未完成执行，不会自动续跑。
 
-更详细的执行与配置边界见 [应用参考文档](https://github.com/topabomb/rikkahub_mcp/blob/master/docs/references/application-architecture.md)。
+更详细的执行与配置边界见 [应用参考文档](https://github.com/topabomb/measix-pilot/blob/master/docs/references/application-architecture.md)。

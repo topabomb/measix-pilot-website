@@ -8,10 +8,10 @@ category: 更新
 
 # 更新日志
 
-> 以下更新日志随每次版本发布自动同步，源自 [rikkahub_mcp 仓库](https://github.com/topabomb/rikkahub_mcp/blob/master/docs/dev/changelog.md)。
+> 以下更新日志随每次版本发布自动同步，源自 [measix-pilot 仓库](https://github.com/topabomb/measix-pilot/blob/master/docs/dev/changelog.md)。
 
 ::: tip 版本线说明
-Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线（`2.x.x`）独立。完整的上游同步分析详见 [上游同步文档](https://github.com/topabomb/rikkahub_mcp/blob/master/docs/dev/upstream-sync.md)。
+Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线（`2.x.x`）独立。完整的上游同步分析详见 [上游同步文档](https://github.com/topabomb/measix-pilot/blob/master/docs/dev/upstream-sync.md)。
 :::
 
 <!-- CHANGELOG_CONTENT_START -->

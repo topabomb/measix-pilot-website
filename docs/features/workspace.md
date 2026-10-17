@@ -48,4 +48,4 @@ HTML 当前以源码查看。各入口有格式、大小与授权限制；远程
 
 </details>
 
-素材来源与能力限制见 [仓库 README](https://github.com/topabomb/rikkahub_mcp#readme) 和 [Workspace 参考](https://github.com/topabomb/rikkahub_mcp/blob/master/docs/references/workspace-architecture.md)。
+素材来源与能力限制见 [仓库 README](https://github.com/topabomb/measix-pilot#readme) 和 [Workspace 参考](https://github.com/topabomb/measix-pilot/blob/master/docs/references/workspace-architecture.md)。

@@ -70,7 +70,7 @@ export default defineUserConfig({
         description: SITE_DESCRIPTION,
         url: SITE_URL,
         downloadUrl:
-          "https://github.com/topabomb/rikkahub_mcp/releases/latest",
+          "https://github.com/topabomb/measix-pilot/releases/latest",
         author: {
           "@type": "Person",
           name: "topabomb",
@@ -115,7 +115,7 @@ export default defineUserConfig({
       cyan: "#06b6d4",
     },
 
-    repo: "topabomb/rikkahub_mcp",
+    repo: "topabomb/measix-pilot",
     repoLabel: "GitHub",
     docsRepo: "topabomb/measix-pilot-website",
     docsBranch: "main",
@@ -189,7 +189,7 @@ export default defineUserConfig({
     blog: false,
     copyright: "© 2026 Measix Pilot · AGPL-3.0",
     footer:
-      "基于 <a href='https://github.com/rikkahub/rikkahub'>RikkaHub</a> fork · 由 <a href='https://theme-hope.vuejs.press/'>VuePress Theme Hope</a> 驱动",
+      "源自 <a href='https://github.com/rikkahub/rikkahub'>RikkaHub</a> · 独立演进 · 由 <a href='https://theme-hope.vuejs.press/'>VuePress Theme Hope</a> 驱动",
     displayFooter: true,
     pageInfo: ["Author", "Date", "ReadingTime", "PageView"],
 

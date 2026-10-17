@@ -16,7 +16,7 @@ category: 下载
 
 从 GitHub Releases 下载最新版本 APK：
 
-[前往 GitHub Releases 下载](https://github.com/topabomb/rikkahub_mcp/releases){:target="_blank" .btn .btn--primary}
+[前往 GitHub Releases 下载](https://github.com/topabomb/measix-pilot/releases){:target="_blank" .btn .btn--primary}
 
 ### 📋 系统要求
 
@@ -60,8 +60,8 @@ Measix Pilot 采用独立版本线（`0.0.x`），与上游 RikkaHub 版本线�
 如果你想自行编译，可以克隆源码：
 
 ```bash
-git clone https://github.com/topabomb/rikkahub_mcp.git
-cd rikkahub_mcp
+git clone https://github.com/topabomb/measix-pilot.git
+cd measix-pilot
 ./gradlew assembleDebug --no-parallel --max-workers=1
 ```
 
@@ -74,5 +74,5 @@ Windows PowerShell 使用 `.\gradlew.bat assembleDebug --no-parallel --max-worke
 - Android SDK 37
 
 ::: tip 许可证
-Measix Pilot 基于 [AGPL-3.0](https://github.com/topabomb/rikkahub_mcp/blob/master/LICENSE) 许可证发布。自建构建和分发请遵守许可证条款。
+Measix Pilot 基于 [AGPL-3.0](https://github.com/topabomb/measix-pilot/blob/master/LICENSE) 许可证发布。自建构建和分发请遵守许可证条款。
 :::
