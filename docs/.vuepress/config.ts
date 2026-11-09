@@ -82,8 +82,8 @@ export default defineUserConfig({
           price: "0",
           priceCurrency: "USD",
         },
-        softwareVersion: "0.0.20",
-        datePublished: "2026-10-16",
+        softwareVersion: "0.0.21",
+        datePublished: "2026-11-09",
         featureList: [
           "原生 Android Agent Harness",
           "MCP 协议集成",
